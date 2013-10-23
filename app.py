@@ -65,12 +65,35 @@ def view_post(username):
     author_id = session.get('user_id')
     owner_id = model.get_user_id_by_username(username)
     model.insert_post(owner_id, author_id, post_text)
+    model.CONN.close()
+
     return redirect(url_for("view_user", username = username))
 
 
-@app.route("/register")
+@app.route("/register", methods = ["POST"])
 def register():
-    return render_template("register.html")
+    model.connect_to_db()
+    #check if username already exists in db
+        #throw and error
+    submitted_username = request.form.get('username')
+    submitted_password = request.form.get('password')
+    submitted_password_verify = request.form.get('password_verify')
+    if model.get_user_id_by_username(submitted_username) != None:
+        flash("Username already exists")
+        model.CONN.close()
+        return render_template('register.html')
+    else:
+        if submitted_password != submitted_password_verify:
+            flash("Passwords do not match")
+            model.CONN.close()
+            return render_template('register.html')
+        else: 
+            model.insert_user(submitted_username, hash(submitted_password))
+            model.CONN.close()
+            return render_template(url_for("view_user", username=submitted_username))
+
+
+
 
 if __name__ == "__main__":
     app.run(debug = True)

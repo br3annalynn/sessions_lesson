@@ -53,4 +53,10 @@ def insert_post(owner_id, author_id, post_text):
     CONN.commit()
     print "***********************************Success!*************************"
 
+def insert_user(username, hashed_password):
+    query = """INSERT into users (username, password) VALUES (?, ?)"""
+    DB.execute(query, (username, hashed_password))
+    CONN.commit()
+    print "***********************************Success!*************************"
+
 
