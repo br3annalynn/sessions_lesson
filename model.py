@@ -1,5 +1,4 @@
 import sqlite3
-from datetime import datetime
 
 # ADMIN_USER="hackbright"
 # ADMIN_PASSWORD=5980025637247534551
@@ -46,8 +45,8 @@ def get_posts_by_user_id(user_id):
     rows = DB.fetchall()
     return rows
 
-def insert_post(owner_id, author_id, post_text):
-    created_at = datetime.now()
+def insert_post(owner_id, author_id, created_at, post_text):
+    
     query = """INSERT into wall_posts (owner_id, author_id, created_at, content) VALUES (?, ?, ?, ?)"""
     DB.execute(query, (owner_id, author_id, created_at, post_text))
     CONN.commit()

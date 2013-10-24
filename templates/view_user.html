@@ -4,15 +4,17 @@
     <h1> {{username}}'s Page</h1>
 
         {% if session.get("user_id") %}
-        <form class="post" action="{{url_for("view_user", username=username)}}" method='POST'>
-            <input type="text-area" name="post_text">
-            <input type="submit" class="btn btn-lg btn-primary btn-block" value="Submit">
+        <form class="submit_post" action="{{url_for("view_user", username=username)}}" method='POST'>
+            <input id = "post_box" type="text-area" name="post_text">
+            <input type="submit" id="submit_btn" class="btn btn-lg btn-primary btn-block" value="Submit">
         </form>
         {% endif %}
         {% for post in posts %}
+        <div class = "wall_post">
         <h2 class = "author">{{post[0]}}</h2>
-        <p class = "post">{{post[2]}}</p>
-        <h3 class = "post-date">{{post[3]}}</h3>
+        <p class = "post_content">{{post[2]}}</p>
+        <time class = "post-date">{{post[3]}}</time>
+        </div>
         {% endfor %}
     
     {% endblock %}

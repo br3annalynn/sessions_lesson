@@ -2,59 +2,51 @@
 You're going to build a 'wall' (think of a site you know, it rhymes with... Oh, I don't know. Space cook.).
 
 1.
-    Do this first: The first thing to do is to change your authenticate function to search the database for a user and password, rather than pulling from the admin info. It should also put the user_id into the session instead of the username. x
+    Do this first: The first thing to do is to change your authenticate function to search the database for a user and password, rather than pulling from the admin info. It should also put the user_id into the session instead of the username. xXXXXXXXXXXXX
 
 which will require the following handlers:
 
 1 a. GET
 
-    1. Take the time to write a get_user_by_name function. x
+    1. Take the time to write a get_user_by_name function. xXXXXXXXXXXXXXXX
 
     2. make a GET handler named view_user, with a url pattern:
     /user/<username>
 
-        The handler should take the username passed to it, and look up the user's id by their name (call the function).  Use that id to look up that user's wall_posts, then send the collection of rows to a template named wall.html.
+        The handler should take the username passed to it, and look up the user's id by their name (call the function).  Use that id to look up that user's wall_posts, then send the collection of rows to a template named wall.html. XXXXXXXXXXXXXXX
+
+            ALSO, make sure you cant put in a URL of a user that doesn't exist XXXXXXXXXXXX?
 
     
     3. make a wall template
-        a. The wall template should use a {% for %} directive to loop through all the wall_post rows, and display them each in their own div, along with the author's name and the created_at time (formatted however you like).
+        a. The wall template should use a {% for %} directive to loop through all the wall_post rows, and display them each in their own div, along with the author's name and the created_at time (formatted however you like). XXXXXXXXXXXXXXXXx
 
         b. The template should also check if the browser is logged in using an {% if %} directive. If so, display a form whose method is POST and action is the url for handler number two.
             It should have: 
             a textarea
-            a submit button.
+            a submit button.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
         Refer to the jinja documentation for the usage of for loops and such.
 
 1.b POST
-        A POST handler named post_to_wall, with the exact same pattern as the GET handler, which will do the following things:
+        A POST handler named post_to_wall, with the exact same pattern as the GET handler, which will do the following things:xxxxxxxxxxxxxxxxxxxx
 
     1.
-        It will receive the text from handler number one, extract a username from the url, and extract the user id of the currently logged-in user from the session.
+        It will receive the text from handler number one, extract a username from the url, and extract the user id of the currently logged-in user from the session.xxxxxxxxxxxxxxxxx
 
     2.
-        It will search the users database table to find the user id associated with the username. (See, I told you you'd do it again.)
+        It will search the users database table to find the user id associated with the username. (See, I told you you'd do it again.)xxxxxxxxxxxxxxxxxxxx
 
     3.
         It will insert a new row into the users database with the owner_id being the user_id associated with the username, and the author_id being that of the currently logged-in user.
 
     4.
-        It will redirect back to handler number one.
+        It will redirect back to handler number one. xxxxxxxxxxxxx
 
 1c. REGISTER
 
     A handler named register (provided for you, you just need to add one thing.
 
-    You only need to add one thing here, check the session to see if the user is logged in. If so, redirect them to their own wall using url_for.
-
-1d. CREATE ACCOUNT
-
-    A handler named create_account. It should do the following:
-
-    1.  FIRST
-        if the session indicates a user is currently logged in, redirect them to their wall.
-
-    2. OTHERWISE
 
         Receive the form from the register template. Extract the username from the template. You can use your get_user_by_name function to see if that user exists.
 

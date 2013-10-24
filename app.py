@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect, session, url_for, flash
 import model
+from datetime import datetime
+
 
 app = Flask(__name__)
 app.secret_key = "shhhhthisisasecret"
@@ -51,7 +53,7 @@ def view_user(username):
     if owner_id != None:
         model.CONN.close()
         return render_template("view_user.html", username = username,
-                                                posts = posts)
+                                                posts = reversed(posts))
     else:
         flash("User not found")
         return redirect(url_for("index"))
@@ -63,11 +65,19 @@ def view_post(username):
     model.connect_to_db()
     post_text = request.form.get('post_text')
     author_id = session.get('user_id')
+    datetime_object = datetime.now()
+    created_at = datetime_object.strftime('%m-%d-%Y, %H:%M')
     owner_id = model.get_user_id_by_username(username)
-    model.insert_post(owner_id, author_id, post_text)
+    model.insert_post(owner_id, author_id, created_at, post_text)
     model.CONN.close()
 
     return redirect(url_for("view_user", username = username))
+
+
+@app.route("/register")
+def get_registration_info():
+    return render_template("register.html")
+    
 
 
 @app.route("/register", methods = ["POST"])
@@ -76,21 +86,22 @@ def register():
     #check if username already exists in db
         #throw and error
     submitted_username = request.form.get('username')
+    print "**************************", submitted_username
     submitted_password = request.form.get('password')
     submitted_password_verify = request.form.get('password_verify')
     if model.get_user_id_by_username(submitted_username) != None:
         flash("Username already exists")
         model.CONN.close()
-        return render_template('register.html')
+        return redirect(url_for("get_registration_info"))
     else:
         if submitted_password != submitted_password_verify:
             flash("Passwords do not match")
             model.CONN.close()
-            return render_template('register.html')
+            return redirect(url_for("get_registration_info"))
         else: 
             model.insert_user(submitted_username, hash(submitted_password))
             model.CONN.close()
-            return render_template(url_for("view_user", username=submitted_username))
+            return redirect(url_for("view_user", username=submitted_username))
 
 
 
